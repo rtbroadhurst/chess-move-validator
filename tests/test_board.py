@@ -1,6 +1,7 @@
 import pytest
 
 from chess_validator.board import Board
+from chess_validator.pieces import Piece
 
 
 def test_board_starts_with_expected_defaults():
@@ -40,10 +41,11 @@ def test_get_piece_raises_for_out_of_bounds_position():
 
 def test_set_piece_stores_piece_on_board():
     board = Board()
+    knight = Piece("white", "knight")
 
-    board.set_piece(2, 5, "N")
+    board.set_piece(2, 5, knight)
 
-    assert board.get_piece(2, 5) == "N"
+    assert board.get_piece(2, 5) is knight
 
 
 def test_set_piece_can_clear_a_square():
@@ -59,14 +61,14 @@ def test_set_piece_raises_for_out_of_bounds_position():
     board = Board()
 
     with pytest.raises(ValueError):
-        board.set_piece(-1, 0, "K")
+        board.set_piece(-1, 0, Piece("white", "king"))
 
 
 def test_is_empty_reports_square_state():
     board = Board()
 
     assert board.is_empty(1, 1) is True
-    board.set_piece(1, 1, "P")
+    board.set_piece(1, 1, Piece("white", "pawn"))
     assert board.is_empty(1, 1) is False
 
 
@@ -83,9 +85,22 @@ def test_load_fen_places_pieces_on_expected_squares():
 
     board.load_fen("4k3/8/8/8/8/8/4P3/4K3")
 
-    assert board.get_piece(0, 4) == "k"
-    assert board.get_piece(6, 4) == "P"
-    assert board.get_piece(7, 4) == "K"
+    black_king = board.get_piece(0, 4)
+    white_pawn = board.get_piece(6, 4)
+    white_king = board.get_piece(7, 4)
+
+    assert isinstance(black_king, Piece)
+    assert black_king.color == "black"
+    assert black_king.kind == "king"
+
+    assert isinstance(white_pawn, Piece)
+    assert white_pawn.color == "white"
+    assert white_pawn.kind == "pawn"
+
+    assert isinstance(white_king, Piece)
+    assert white_king.color == "white"
+    assert white_king.kind == "king"
+
     assert board.get_piece(3, 3) is None
 
 

@@ -1,5 +1,7 @@
 """Contains the board class, which stores the current board state."""
 
+from .pieces import Piece
+
 class Board:
     """Stores the board grid, active turn, and en passant target square."""
 
@@ -54,6 +56,15 @@ class Board:
         if len(ranks) != 8:
             raise ValueError("FEN piece placement must contain 8 ranks.")
 
+        kinds = {
+            "p": "pawn",
+            "r": "rook",
+            "n": "knight",
+            "b": "bishop",
+            "q": "queen",
+            "k": "king",
+        }
+
         new_grid = []
 
         for rank in ranks:
@@ -63,7 +74,8 @@ class Board:
                 if char.isdigit():
                     row.extend([None] * int(char))
                 else:
-                    row.append(char)
+                    color = "white" if char.isupper() else "black"
+                    row.append(Piece(color, kinds[char.lower()]))
 
             if len(row) != 8:
                 raise ValueError("Each FEN rank must contain 8 squares.")
@@ -82,7 +94,5 @@ class Board:
                 if square is None:
                     print(".", end=" ")
                 else:
-                    print(square, end=" ")
+                    print(square.fen_symbol(), end=" ")
             print()
-
-    
