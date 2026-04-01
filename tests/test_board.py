@@ -90,15 +90,15 @@ def test_load_fen_places_pieces_on_expected_squares():
     white_king = board.get_piece(7, 4)
 
     assert isinstance(black_king, Piece)
-    assert black_king.color == "black"
+    assert black_king.colour == "black"
     assert black_king.kind == "king"
 
     assert isinstance(white_pawn, Piece)
-    assert white_pawn.color == "white"
+    assert white_pawn.colour == "white"
     assert white_pawn.kind == "pawn"
 
     assert isinstance(white_king, Piece)
-    assert white_king.color == "white"
+    assert white_king.colour == "white"
     assert white_king.kind == "king"
 
     assert board.get_piece(3, 3) is None
