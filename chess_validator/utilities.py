@@ -1,9 +1,7 @@
 """Contains utility functions"""
 
 def square_to_coords(square: str) -> tuple[int, int]:
-    """
-    Converts a square in chess notation (e.g. 'e4') to 0 indexed (row, column) coordinates.
-    """
+    """Converts a square in chess notation (e.g. 'e4') to 0 indexed (row, column) coordinates."""
     
     square_row = square[1]
     square_column = square[0]
@@ -21,9 +19,7 @@ def square_to_coords(square: str) -> tuple[int, int]:
 
 
 def coords_to_square(row: int, column: int) -> str:
-    """
-    Converts 0 indexed (row, column) coordinates to a square in chess notation (e.g. 'e4').
-    """
+    """Converts 0 indexed (row, column) coordinates to a square in chess notation (e.g. 'e4'). """
 
     if not (0 <= row < 8 and 0 <= column < 8):
         raise ValueError("Row and column must be between 0 and 7.")
@@ -32,3 +28,9 @@ def coords_to_square(row: int, column: int) -> str:
     square_column = chr(ord("a") + column)
     square_row = str(8 - row)
     return f"{square_column}{square_row}"
+
+
+def get_delta(start_row: int, start_col: int, end_row: int, end_col: int) -> tuple[int, int]:
+    """Return the row and column offset from the start square to the end square."""
+    
+    return end_row - start_row, end_col - start_col

@@ -1,6 +1,6 @@
 """Contains code for the CLI"""
 
-from .board import Board
+from board import Board
 
 def main():
     board = Board()

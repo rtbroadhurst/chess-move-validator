@@ -1,4 +1,19 @@
-"""Contains the board class, which stores the current board state."""
+"""Contains the board class, which stores the current board state
+
+    Board coordinate system (a8 = (0, 0)):
+
+        a   b   c   d   e   f   g   h
+    +---+---+---+---+---+---+---+---+
+    8 |0,0|0,1|0,2|0,3|0,4|0,5|0,6|0,7|
+    7 |1,0|1,1|1,2|1,3|1,4|1,5|1,6|1,7|
+    6 |2,0|2,1|2,2|2,3|2,4|2,5|2,6|2,7|
+    5 |3,0|3,1|3,2|3,3|3,4|3,5|3,6|3,7|
+    4 |4,0|4,1|4,2|4,3|4,4|4,5|4,6|4,7|
+    3 |5,0|5,1|5,2|5,3|5,4|5,5|5,6|5,7|
+    2 |6,0|6,1|6,2|6,3|6,4|6,5|6,6|6,7|
+    1 |7,0|7,1|7,2|7,3|7,4|7,5|7,6|7,7|
+    +---+---+---+---+---+---+---+---+
+"""
 
 from .pieces import Piece
 
@@ -7,9 +22,11 @@ class Board:
 
     def __init__(self) -> None:
         """Initialise an empty 8x8 board with White to move."""
-        self.grid = [[None for _ in range(8)] for _ in range(8)]
+        self.grid: list[list[Piece | None]] = [
+            [None for _ in range(8)] for _ in range(8)
+        ]
         self.turn = "white"
-        self.en_passant_target = None
+        self.en_passant_target: str | None = None
 
 
     def is_in_bounds(self, row: int, col: int) -> bool:
@@ -18,7 +35,7 @@ class Board:
         return 0 <= row < 8 and 0 <= col < 8
 
 
-    def get_piece(self, row: int, col: int):
+    def get_piece(self, row: int, col: int) -> Piece | None:
         """Return the piece at the given coordinates."""
         
         if not self.is_in_bounds(row, col):
@@ -26,7 +43,7 @@ class Board:
         return self.grid[row][col]
 
 
-    def set_piece(self, row: int, col: int, piece) -> None:
+    def set_piece(self, row: int, col: int, piece: Piece | None) -> None:
         """Place a piece on the given coordinates."""
         
         if not self.is_in_bounds(row, col):
@@ -74,8 +91,8 @@ class Board:
                 if char.isdigit():
                     row.extend([None] * int(char))
                 else:
-                    color = "white" if char.isupper() else "black"
-                    row.append(Piece(color, kinds[char.lower()]))
+                    colour = "white" if char.isupper() else "black"
+                    row.append(Piece(colour, kinds[char.lower()]))
 
             if len(row) != 8:
                 raise ValueError("Each FEN rank must contain 8 squares.")
