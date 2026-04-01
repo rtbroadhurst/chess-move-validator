@@ -4,7 +4,7 @@ from ..utilities import get_delta
 
 
 def is_valid_rook_move(board, start_row, start_col, end_row, end_col) -> bool:
-    """Return True if valid rook ove, otherwise False"""
+    """Return True if valid rook move, otherwise False"""
     
     # Get move deltas
     delta_row, delta_col = get_delta(start_row, start_col, end_row, end_col)
