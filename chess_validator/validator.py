@@ -2,7 +2,7 @@ from .rules.pawn import is_valid_pawn_move
 from .rules.rook import is_valid_rook_move
 from .rules.bishop import is_valid_bishop_move
 from .rules.knight import is_valid_knight_move
-
+from .rules.king import is_valid_king_move
 
 """Contains logic for validating moves"""
 
@@ -28,7 +28,7 @@ def validate_move(board, start_row, start_col, end_row, end_col):
         case "queen":
             pass
         case "king":
-            pass
+            return is_valid_king_move(board, start_row, start_col, end_row, end_col)
         case _:
             return False
 
