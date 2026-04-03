@@ -1,5 +1,6 @@
 import pytest
 
+import chess_validator.board as board_module
 from chess_validator.board import Board
 from chess_validator.pieces import Piece
 
@@ -79,6 +80,52 @@ def test_find_king_returns_coordinates_for_matching_colour():
 
     assert board.find_king("white") == (7, 4)
     assert board.find_king("black") == (0, 4)
+
+
+def test_move_piece_returns_false_and_leaves_board_unchanged_for_invalid_move(monkeypatch):
+    board = Board()
+    pawn = Piece("white", "pawn")
+    board.set_piece(6, 4, pawn)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: False)
+
+    moved = board.move_piece(6, 4, 5, 4)
+
+    assert moved is False
+    assert board.get_piece(6, 4) is pawn
+    assert board.get_piece(5, 4) is None
+    assert board.turn == "white"
+
+
+def test_move_piece_moves_piece_and_switches_turn_for_valid_move(monkeypatch):
+    board = Board()
+    pawn = Piece("white", "pawn")
+    board.set_piece(6, 4, pawn)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    moved = board.move_piece(6, 4, 5, 4)
+
+    assert moved is True
+    assert board.get_piece(6, 4) is None
+    assert board.get_piece(5, 4) is pawn
+    assert board.turn == "black"
+
+
+def test_move_piece_replaces_destination_piece_when_move_is_valid(monkeypatch):
+    board = Board()
+    rook = Piece("white", "rook")
+    knight = Piece("black", "knight")
+    board.set_piece(7, 0, rook)
+    board.set_piece(4, 0, knight)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    moved = board.move_piece(7, 0, 4, 0)
+
+    assert moved is True
+    assert board.get_piece(7, 0) is None
+    assert board.get_piece(4, 0) is rook
 
 
 def test_load_fen_loads_empty_board():

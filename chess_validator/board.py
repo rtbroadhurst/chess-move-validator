@@ -15,7 +15,9 @@
     +---+---+---+---+---+---+---+---+
 """
 
+
 from .pieces import Piece
+from .validator import validate_move
 
 class Board:
     """Stores the board grid, active turn, and en passant target square."""
@@ -59,7 +61,11 @@ class Board:
     
     
     def find_king(self, colour: str) -> tuple[int, int]:
-        """Return the king's coordinates as (row, column) for the given colour.""" 
+        """
+        Return the king's coordinates as (row, column) for the given colour.
+        
+        Raise value error if no king of that colour exists
+        """ 
         
                      
         for column in range(0, 8):
@@ -71,6 +77,24 @@ class Board:
         raise ValueError(f"No {colour} king found on the board.")
 
 
+    def move_piece(self, start_row: int, start_col: int, end_row: int, end_col: int):
+        """
+        Move a piece on the board
+        
+        Return True if successful, otherwise False
+        """
+        
+        if not validate_move(self, start_row, start_col, end_row, end_col):
+            return False
+        
+        piece = self.get_piece(start_row, start_col)
+        self.set_piece(start_row, start_col, None)
+        self.set_piece(end_row, end_col, piece)
+        
+        self.turn = "black" if self.turn == "white" else "white"
+        
+        return True
+            
     def load_fen(self, fen: str) -> None:
         """
         Load a board position from FEN (Forsyth-Edwards Notation)
