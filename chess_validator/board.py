@@ -40,6 +40,7 @@ class Board:
         
         if not self.is_in_bounds(row, col):
             raise ValueError("Position is out of bounds.")
+        
         return self.grid[row][col]
 
 
@@ -55,6 +56,19 @@ class Board:
         """Return True if the square is empty."""
         
         return self.get_piece(row, col) is None
+    
+    
+    def find_king(self, colour: str) -> tuple[int, int]:
+        """Return the king's coordinates as (row, column) for the given colour.""" 
+        
+                     
+        for column in range(0, 8):
+            for row in range(0, 8):
+                piece = self.get_piece(row, column)
+                if piece != None and piece.kind == "king" and piece.colour == colour:
+                    return row, column
+                
+        raise ValueError(f"No {colour} king found on the board.")
 
 
     def load_fen(self, fen: str) -> None:

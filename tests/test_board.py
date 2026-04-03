@@ -72,6 +72,15 @@ def test_is_empty_reports_square_state():
     assert board.is_empty(1, 1) is False
 
 
+def test_find_king_returns_coordinates_for_matching_colour():
+    board = Board()
+    board.set_piece(0, 4, Piece("black", "king"))
+    board.set_piece(7, 4, Piece("white", "king"))
+
+    assert board.find_king("white") == (7, 4)
+    assert board.find_king("black") == (0, 4)
+
+
 def test_load_fen_loads_empty_board():
     board = Board()
 
