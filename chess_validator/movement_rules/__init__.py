@@ -12,6 +12,7 @@ They do not check:
 """
 
 from .pawn import is_valid_pawn_move
+from .pawn import is_valid_pawn_attack
 from .rook import is_valid_rook_move
 from .bishop import is_valid_bishop_move
 from .knight import is_valid_knight_move

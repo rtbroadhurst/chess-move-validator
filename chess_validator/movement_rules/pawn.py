@@ -45,7 +45,7 @@ def is_valid_pawn_move(board, start_row, start_col, end_row, end_col) -> bool:
         return True
 
     # Check diagonal capture move
-    if delta_row == direction and abs(delta_col) == 1:
+    if is_valid_pawn_attack(board, start_row, start_col, end_row, end_col):
         
         # Must capture opposing piece
         target_piece = board.get_piece(end_row, end_col)
@@ -59,3 +59,17 @@ def is_valid_pawn_move(board, start_row, start_col, end_row, end_col) -> bool:
         return True
 
     return False
+
+
+def is_valid_pawn_attack(board, start_row, start_col, target_row, target_col) -> bool:
+    """Return True if valid pawn attack"""
+    
+    
+    piece = board.get_piece(start_row, start_col)
+    if piece is None or piece.kind != "pawn":
+        return False
+    
+    delta_row, delta_col = get_move_offset(start_row, start_col, target_row, target_col)
+    direction = -1 if piece.colour == "white" else 1
+
+    return delta_row == direction and abs(delta_col) == 1

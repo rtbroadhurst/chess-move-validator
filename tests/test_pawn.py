@@ -63,6 +63,15 @@ def test_rejects_white_pawn_diagonal_move_without_capture():
     assert validate_move(board, 6, 4, 5, 5) is False
 
 
+def test_rejects_white_pawn_diagonal_move_onto_own_piece():
+    board = Board()
+    board.turn = "white"
+    board.set_piece(6, 4, Piece("white", "pawn"))
+    board.set_piece(5, 5, Piece("white", "knight"))
+
+    assert validate_move(board, 6, 4, 5, 5) is False
+
+
 def test_rejects_white_pawn_backward_move():
     board = Board()
     board.turn = "white"
@@ -102,3 +111,11 @@ def test_rejects_black_pawn_backward_move():
     board.set_piece(1, 4, Piece("black", "pawn"))
 
     assert validate_move(board, 1, 4, 0, 4) is False
+
+
+def test_rejects_black_pawn_diagonal_move_without_capture():
+    board = Board()
+    board.turn = "black"
+    board.set_piece(1, 4, Piece("black", "pawn"))
+
+    assert validate_move(board, 1, 4, 2, 3) is False
