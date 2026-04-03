@@ -1,4 +1,4 @@
-"""Contains logic for determining which pieces are attacked"""
+"""Contains logic for determining whether squares are attacked."""
 
 
 from .movement_rules import (
@@ -30,6 +30,9 @@ def is_square_attacked(board, target_row, target_col, by_colour) -> bool:
 def piece_attacks_square(board, start_row, start_col, target_row, target_col) -> bool:
     """Return True if the piece on the start square attacks the target square."""
     
+    if not board.is_in_bounds(target_row, target_col):
+        return False
+    
     if start_row == target_row and start_col == target_col:
         return False
     
@@ -38,7 +41,7 @@ def piece_attacks_square(board, start_row, start_col, target_row, target_col) ->
     if piece is None:
         return False
 
-    # Other than for pawn, movement_rules logic is reused for this
+    # Other than for pawn, movement_rules logic is reused 
     match piece.kind:
         case "pawn":
             return is_valid_pawn_attack(board, start_row, start_col, target_row, target_col)
