@@ -79,7 +79,7 @@ class Board:
 
     def move_piece(self, start_row: int, start_col: int, end_row: int, end_col: int):
         """
-        Move a piece on the board
+        Move a piece on the board and update turn state
         
         Return True if successful, otherwise False
         """
@@ -87,14 +87,21 @@ class Board:
         if not validate_move(self, start_row, start_col, end_row, end_col):
             return False
         
-        piece = self.get_piece(start_row, start_col)
-        self.set_piece(start_row, start_col, None)
-        self.set_piece(end_row, end_col, piece)
+        self._apply_move_unchecked(start_row, start_col, end_row, end_col)
         
         self.turn = "black" if self.turn == "white" else "white"
         
         return True
-            
+
+
+    def _apply_move_unchecked(self, start_row: int, start_col: int, end_row: int, end_col: int) -> None:
+        """Move a piece without validating legality or updating turn state."""
+
+        piece = self.get_piece(start_row, start_col)
+        self.set_piece(start_row, start_col, None)
+        self.set_piece(end_row, end_col, piece)
+
+
     def load_fen(self, fen: str) -> None:
         """
         Load a board position from FEN (Forsyth-Edwards Notation)
