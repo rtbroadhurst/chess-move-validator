@@ -30,7 +30,7 @@ def coords_to_square(row: int, column: int) -> str:
     return f"{square_column}{square_row}"
 
 
-def get_delta(start_row: int, start_col: int, end_row: int, end_col: int) -> tuple[int, int]:
+def get_move_offset(start_row: int, start_col: int, end_row: int, end_col: int) -> tuple[int, int]:
     """Return the row and column offset from the start square to the end square."""
     
     return end_row - start_row, end_col - start_col

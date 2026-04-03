@@ -1,19 +1,17 @@
 """Contains piece specific rules for the rook"""
 
-from ..utilities import get_delta
+from ..utilities import get_move_offset
 
 
 def is_valid_rook_move(board, start_row, start_col, end_row, end_col) -> bool:
-    """Return True if valid rook move, otherwise False"""
+    """Return True if the rook move is valid."""
     
-    # Get move deltas
-    delta_row, delta_col = get_delta(start_row, start_col, end_row, end_col)
     
+    delta_row, delta_col = get_move_offset(start_row, start_col, end_row, end_col)
     
     # Move must end in the same row or same column
     if delta_row and delta_col:
         return False
-    
     
     # Move must not be blocked by an intermediate square
     if delta_row > 0:

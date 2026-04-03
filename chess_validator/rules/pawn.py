@@ -1,16 +1,14 @@
 """Contains piece specific rules for the pawn"""
 
-from ..utilities import get_delta
+from ..utilities import get_move_offset
 
 
 def is_valid_pawn_move(board, start_row, start_col, end_row, end_col) -> bool:
-    """Return True if valid pawn move, otherwise False"""
+    """Return True if the pawn move is valid."""
     
-    # Get piece object
+    
     piece = board.get_piece(start_row, start_col)
-    
-    # Determine change in row and column
-    delta_row, delta_col = get_delta(start_row, start_col, end_row, end_col)
+    delta_row, delta_col = get_move_offset(start_row, start_col, end_row, end_col)
     
     # Determine movement direction and starting row based on colour
     if piece.colour == "white":

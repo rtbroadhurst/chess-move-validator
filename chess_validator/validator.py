@@ -1,3 +1,5 @@
+"""Contains logic for validating moves"""
+
 from .rules.pawn import is_valid_pawn_move
 from .rules.rook import is_valid_rook_move
 from .rules.bishop import is_valid_bishop_move
@@ -5,43 +7,24 @@ from .rules.knight import is_valid_knight_move
 from .rules.king import is_valid_king_move
 from .rules.queen import is_valid_queen_move
 
-"""Contains logic for validating moves"""
 
 def validate_move(board, start_row, start_col, end_row, end_col):
     """Return True if a move is valid, False if not"""
     
+    
     if not basic_checks(board, start_row, start_col, end_row, end_col):
         return False
 
-    # Get piece type
-    piece_type = (board.get_piece(start_row, start_col)).kind
-
-    # Match piece type to ruleset
-    match piece_type:
-        case "pawn":
-            return is_valid_pawn_move(board, start_row, start_col, end_row, end_col)
-        case "rook":
-            return is_valid_rook_move(board, start_row, start_col, end_row, end_col)
-        case "knight":
-            return is_valid_knight_move(board, start_row, start_col, end_row, end_col)
-        case "bishop":
-            return is_valid_bishop_move(board, start_row, start_col, end_row, end_col)
-        case "queen":
-            return is_valid_queen_move(board, start_row, start_col, end_row, end_col)
-        case "king":
-            return is_valid_king_move(board, start_row, start_col, end_row, end_col)
-        case _:
-            return False
-
-
-def basic_checks(board, start_row, start_col, end_row, end_col):
-    """
-    Complete basic intital checks
-    Return False if any have failed
-    Otherwise, returns True
-    """
+    if not piece_rules(board, start_row, start_col, end_row, end_col):
+        return False
     
-    # Check starting and destination squares are on the board
+    return True
+    
+def basic_checks(board, start_row, start_col, end_row, end_col):
+    """Return True if the move passes shared checks before piece specific validation."""    
+    
+    
+    # Check that the source and destination squares are on the board
     if not board.is_in_bounds(start_row, start_col) or not board.is_in_bounds(end_row, end_col):
         return False
     
@@ -65,3 +48,23 @@ def basic_checks(board, start_row, start_col, end_row, end_col):
 
     return True
     
+
+def piece_rules(board, start_row, start_col, end_row, end_col):
+    moving_piece = board.get_piece(start_row, start_col)
+
+    match moving_piece.kind:
+        case "pawn":
+            return is_valid_pawn_move(board, start_row, start_col, end_row, end_col)
+        case "rook":
+            return is_valid_rook_move(board, start_row, start_col, end_row, end_col)
+        case "knight":
+            return is_valid_knight_move(board, start_row, start_col, end_row, end_col)
+        case "bishop":
+            return is_valid_bishop_move(board, start_row, start_col, end_row, end_col)
+        case "queen":
+            return is_valid_queen_move(board, start_row, start_col, end_row, end_col)
+        case "king":
+            return is_valid_king_move(board, start_row, start_col, end_row, end_col)
+        case _:
+            return False
+
