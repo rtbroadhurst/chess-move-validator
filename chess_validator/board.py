@@ -24,11 +24,20 @@ class Board:
 
     def __init__(self) -> None:
         """Initialise an empty 8x8 board with White to move."""
+        
         self.grid: list[list[Piece | None]] = [
             [None for _ in range(8)] for _ in range(8)
         ]
+        
         self.turn = "white"
         self.en_passant_target: str | None = None
+
+        self.castling_rights = {
+            "white_kingside": True,
+            "white_queenside": True,
+            "black_kingside": True,
+            "black_queenside": True,
+        }
 
 
     def is_in_bounds(self, row: int, col: int) -> bool:
@@ -87,9 +96,11 @@ class Board:
         if not validate_move(self, start_row, start_col, end_row, end_col):
             return False
         
+        captured_piece = self.get_piece(end_row, end_col)
         self._apply_move_unchecked(start_row, start_col, end_row, end_col)
+        self.update_castling_rights(start_row, start_col, end_row, end_col, captured_piece)
         
-        self.turn = "black" if self.turn == "white" else "white"
+        self.turn = "black" if self.turn == "white" else "white"        
         
         return True
 
@@ -100,6 +111,39 @@ class Board:
         piece = self.get_piece(start_row, start_col)
         self.set_piece(start_row, start_col, None)
         self.set_piece(end_row, end_col, piece)
+
+
+    def update_castling_rights(self, start_row: int, start_col: int, end_row: int, end_col: int, captured_piece: Piece | None) -> None:
+        """Update castling rights based on a move"""
+        
+        piece = self.get_piece(end_row, end_col)
+        colour = piece.colour
+        
+        if piece.kind == "king":
+            self.castling_rights[colour + "_kingside"] = False
+            self.castling_rights[colour + "_queenside"] = False
+        
+        elif piece.kind == "rook":
+            if colour == "white" and start_row == 7 and start_col == 7:
+                self.castling_rights[colour + "_kingside"] = False
+            elif colour == "white" and start_row == 7 and start_col == 0:
+                self.castling_rights[colour + "_queenside"] = False
+            elif colour == "black" and start_row == 0 and start_col == 7:
+                self.castling_rights[colour + "_kingside"] = False
+            elif colour == "black" and start_row == 0 and start_col == 0:
+                self.castling_rights[colour + "_queenside"] = False
+
+        if captured_piece is None or captured_piece.kind != "rook":
+            return
+
+        if captured_piece.colour == "white" and end_row == 7 and end_col == 7:
+            self.castling_rights["white_kingside"] = False
+        elif captured_piece.colour == "white" and end_row == 7 and end_col == 0:
+            self.castling_rights["white_queenside"] = False
+        elif captured_piece.colour == "black" and end_row == 0 and end_col == 7:
+            self.castling_rights["black_kingside"] = False
+        elif captured_piece.colour == "black" and end_row == 0 and end_col == 0:
+            self.castling_rights["black_queenside"] = False
 
 
     def load_fen(self, fen: str) -> None:
@@ -166,5 +210,6 @@ class Board:
         new_board = Board()
         new_board.turn = self.turn
         new_board.en_passant_target = self.en_passant_target
+        new_board.castling_rights = self.castling_rights.copy()
         new_board.grid = [row[:] for row in self.grid]
         return new_board

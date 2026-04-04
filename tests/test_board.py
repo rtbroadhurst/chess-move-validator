@@ -126,6 +126,91 @@ def test_move_piece_replaces_destination_piece_when_move_is_valid(monkeypatch):
     assert moved is True
     assert board.get_piece(7, 0) is None
     assert board.get_piece(4, 0) is rook
+    assert board.castling_rights["white_queenside"] is False
+
+
+def test_move_piece_updates_castling_rights_after_king_moves(monkeypatch):
+    board = Board()
+    king = Piece("white", "king")
+    board.set_piece(7, 4, king)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    board.move_piece(7, 4, 6, 4)
+
+    assert board.castling_rights["white_kingside"] is False
+    assert board.castling_rights["white_queenside"] is False
+
+
+def test_move_piece_only_revokes_rook_rights_from_home_square(monkeypatch):
+    board = Board()
+    rook = Piece("white", "rook")
+    board.set_piece(4, 7, rook)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    board.move_piece(4, 7, 4, 6)
+
+    assert board.castling_rights["white_kingside"] is True
+    assert board.castling_rights["white_queenside"] is True
+
+
+def test_move_piece_revokes_castling_rights_when_home_rook_is_captured(monkeypatch):
+    board = Board()
+    white_rook = Piece("white", "rook")
+    black_rook = Piece("black", "rook")
+    board.turn = "black"
+    board.set_piece(7, 7, white_rook)
+    board.set_piece(0, 7, black_rook)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    board.move_piece(0, 7, 7, 7)
+
+    assert board.castling_rights["white_kingside"] is False
+    assert board.castling_rights["white_queenside"] is True
+
+
+def test_update_castling_rights_revokes_black_kingside_for_home_rook_move():
+    board = Board()
+    rook = Piece("black", "rook")
+    board.set_piece(0, 7, rook)
+    board._apply_move_unchecked(0, 7, 1, 7)
+
+    board.update_castling_rights(0, 7, 1, 7, None)
+
+    assert board.castling_rights["black_kingside"] is False
+    assert board.castling_rights["black_queenside"] is True
+
+
+def test_update_castling_rights_revokes_black_queenside_for_home_rook_capture():
+    board = Board()
+    white_bishop = Piece("white", "bishop")
+    black_rook = Piece("black", "rook")
+    board.set_piece(0, 0, black_rook)
+    board.set_piece(1, 1, white_bishop)
+    captured_piece = board.get_piece(0, 0)
+    board._apply_move_unchecked(1, 1, 0, 0)
+
+    board.update_castling_rights(1, 1, 0, 0, captured_piece)
+
+    assert board.castling_rights["black_kingside"] is True
+    assert board.castling_rights["black_queenside"] is False
+
+
+def test_update_castling_rights_ignores_non_rook_capture_on_home_square():
+    board = Board()
+    white_bishop = Piece("white", "bishop")
+    black_knight = Piece("black", "knight")
+    board.set_piece(1, 1, white_bishop)
+    board.set_piece(0, 7, black_knight)
+    captured_piece = board.get_piece(0, 7)
+    board._apply_move_unchecked(1, 1, 0, 7)
+
+    board.update_castling_rights(1, 1, 0, 7, captured_piece)
+
+    assert board.castling_rights["black_kingside"] is True
+    assert board.castling_rights["black_queenside"] is True
 
 
 def test_apply_move_unchecked_moves_piece_without_switching_turn():
@@ -146,10 +231,12 @@ def test_copy_returns_board_with_independent_grid_lists():
     board.set_piece(7, 0, rook)
     board.turn = "black"
     board.en_passant_target = "e3"
+    board.castling_rights["white_queenside"] = False
 
     copied_board = board.copy()
     copied_board.set_piece(7, 0, None)
     copied_board.set_piece(4, 0, rook)
+    copied_board.castling_rights["black_kingside"] = False
 
     assert copied_board is not board
     assert copied_board.grid is not board.grid
@@ -158,6 +245,8 @@ def test_copy_returns_board_with_independent_grid_lists():
     assert board.get_piece(4, 0) is None
     assert copied_board.turn == "black"
     assert copied_board.en_passant_target == "e3"
+    assert copied_board.castling_rights["white_queenside"] is False
+    assert board.castling_rights["black_kingside"] is True
 
 
 def test_copy_preserves_piece_objects_in_squares():

@@ -93,4 +93,6 @@ def king_in_check(board, start_row, start_col, end_row, end_col) -> bool:
     if is_in_check(board_copy, board_copy.turn):
         return True
     
+    return False
+
     
