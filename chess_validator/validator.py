@@ -13,7 +13,7 @@ from .movement_rules import (
 from .king_safety import is_in_check
 
 
-def validate_move(board, start_row, start_col, end_row, end_col):
+def validate_move(board, start_row, start_col, end_row, end_col, promotion_type = None):
     """Return True if a move is valid, False if not"""
     
     
@@ -23,9 +23,12 @@ def validate_move(board, start_row, start_col, end_row, end_col):
     if not piece_rules(board, start_row, start_col, end_row, end_col):
         return False
     
+    if not promotion_check(board, start_row, start_col, end_row, end_col, promotion_type):
+        return False
+
     if king_in_check(board, start_row, start_col, end_row, end_col):
         return False
-    
+        
     return True
     
     
@@ -95,4 +98,22 @@ def king_in_check(board, start_row, start_col, end_row, end_col) -> bool:
     
     return False
 
+
+def promotion_check(board, start_row, start_col, end_row, end_col, promotion_type):
+    """Return True if the move complies with promotion rules"""
     
+    promotion_types = {"queen", "knight", "rook", "bishop"}
+    
+    if end_row in (0,7) and board.get_piece(start_row, start_col).kind == "pawn":
+        promotion_move = True
+    
+    else: 
+        promotion_move = False
+        
+    if promotion_move and promotion_type not in promotion_types:
+        return False
+    
+    if not promotion_move and promotion_type is not None:
+        return False
+    
+    return True

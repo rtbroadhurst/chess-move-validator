@@ -139,3 +139,35 @@ def test_allows_black_en_passant_capture():
     board.en_passant_target = (5, 3)
 
     assert validate_move(board, 4, 4, 5, 3) is True
+
+
+def test_allows_white_pawn_promotion_with_valid_type():
+    board = board_with_kings()
+    board.turn = "white"
+    board.set_piece(1, 4, Piece("white", "pawn"))
+
+    assert validate_move(board, 1, 4, 0, 4, "queen") is True
+
+
+def test_rejects_white_pawn_promotion_without_type():
+    board = board_with_kings()
+    board.turn = "white"
+    board.set_piece(1, 4, Piece("white", "pawn"))
+
+    assert validate_move(board, 1, 4, 0, 4) is False
+
+
+def test_rejects_white_pawn_promotion_with_invalid_type():
+    board = board_with_kings()
+    board.turn = "white"
+    board.set_piece(1, 4, Piece("white", "pawn"))
+
+    assert validate_move(board, 1, 4, 0, 4, "king") is False
+
+
+def test_rejects_promotion_type_for_non_promotion_move():
+    board = board_with_kings()
+    board.turn = "white"
+    board.set_piece(6, 4, Piece("white", "pawn"))
+
+    assert validate_move(board, 6, 4, 5, 4, "queen") is False

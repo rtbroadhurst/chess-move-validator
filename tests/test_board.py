@@ -153,6 +153,24 @@ def test_move_piece_removes_captured_pawn_for_en_passant(monkeypatch):
     assert board.get_piece(3, 5) is None
 
 
+def test_move_piece_promotes_pawn_to_requested_piece(monkeypatch):
+    board = Board()
+    board.turn = "white"
+    pawn = Piece("white", "pawn")
+    board.set_piece(1, 4, pawn)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    moved = board.move_piece(1, 4, 0, 4, "queen")
+
+    promoted_piece = board.get_piece(0, 4)
+
+    assert moved is True
+    assert promoted_piece is not None
+    assert promoted_piece.colour == "white"
+    assert promoted_piece.kind == "queen"
+
+
 def test_move_piece_replaces_destination_piece_when_move_is_valid(monkeypatch):
     board = Board()
     rook = Piece("white", "rook")

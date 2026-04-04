@@ -87,20 +87,21 @@ class Board:
         raise ValueError(f"No {colour} king found on the board.")
 
 
-    def move_piece(self, start_row: int, start_col: int, end_row: int, end_col: int):
+    def move_piece(self, start_row: int, start_col: int, end_row: int, end_col: int, promotion_type: str | None = None) -> bool:
         """
         Move a piece on the board and update turn state
         
         Return True if successful, otherwise False
         """
         
-        if not validate_move(self, start_row, start_col, end_row, end_col):
+        if not validate_move(self, start_row, start_col, end_row, end_col, promotion_type):
             return False
         
         captured_piece = self.get_piece(end_row, end_col)
         self._apply_move_unchecked(start_row, start_col, end_row, end_col)
         self.update_castling_rights(start_row, start_col, end_row, end_col, captured_piece)
         self.update_en_passant_target(start_row, start_col, end_row, end_col)
+        self.update_pawn_promotion(start_row, start_col, end_row, end_col, promotion_type)
         
         self.turn = "black" if self.turn == "white" else "white"        
         
@@ -190,6 +191,15 @@ class Board:
             self.en_passant_target = (start_row + (d_row // 2), start_col)
 
 
+    def update_pawn_promotion(self, start_row: int, start_col: int, end_row: int, end_col: int, promotion_type: str) -> None:
+        """Promote a pawn that has reached the back rank"""
+        
+        piece = self.get_piece(end_row, end_col)
+        
+        if piece is not None and piece.kind  == "pawn" and end_row in (0, 7):
+            self.set_piece(end_row, end_col, Piece(piece.colour, promotion_type))
+        
+        
     def load_fen(self, fen: str) -> None:
         """
         Load a board position from FEN (Forsyth-Edwards Notation)
