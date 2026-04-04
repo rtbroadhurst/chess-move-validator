@@ -112,6 +112,24 @@ class Board:
         self.set_piece(start_row, start_col, None)
         self.set_piece(end_row, end_col, piece)
 
+        if piece is not None and piece.kind == "king" and start_row == end_row and abs(end_col - start_col) == 2:
+            self._move_castling_rook(end_row, end_col)
+
+
+    def _move_castling_rook(self, row: int, king_end_col: int) -> None:
+        """Move the rook to its castled square after the king has moved."""
+
+        if king_end_col == 6:
+            rook_start_col, rook_end_col = 7, 5
+        elif king_end_col == 2:
+            rook_start_col, rook_end_col = 0, 3
+        else:
+            return
+
+        rook = self.get_piece(row, rook_start_col)
+        self.set_piece(row, rook_start_col, None)
+        self.set_piece(row, rook_end_col, rook)
+
 
     def update_castling_rights(self, start_row: int, start_col: int, end_row: int, end_col: int, captured_piece: Piece | None) -> None:
         """Update castling rights based on a move"""

@@ -30,3 +30,10 @@ def test_is_square_attacked_detects_pawn_attack():
     board.set_piece(6, 4, Piece("white", "pawn"))
 
     assert is_square_attacked(board, 5, 5, "white") is True
+
+
+def test_king_does_not_attack_two_squares_horizontally():
+    board = Board()
+    board.set_piece(7, 4, Piece("white", "king"))
+
+    assert piece_attacks_square(board, 7, 4, 7, 6) is False

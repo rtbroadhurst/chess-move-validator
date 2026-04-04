@@ -142,6 +142,23 @@ def test_move_piece_updates_castling_rights_after_king_moves(monkeypatch):
     assert board.castling_rights["white_queenside"] is False
 
 
+def test_move_piece_also_moves_rook_when_castling(monkeypatch):
+    board = Board()
+    king = Piece("white", "king")
+    rook = Piece("white", "rook")
+    board.set_piece(7, 4, king)
+    board.set_piece(7, 7, rook)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    moved = board.move_piece(7, 4, 7, 6)
+
+    assert moved is True
+    assert board.get_piece(7, 6) is king
+    assert board.get_piece(7, 5) is rook
+    assert board.get_piece(7, 7) is None
+
+
 def test_move_piece_only_revokes_rook_rights_from_home_square(monkeypatch):
     board = Board()
     rook = Piece("white", "rook")
