@@ -25,6 +25,7 @@ def is_valid_castling_move(board, start_row, start_col, end_col) -> bool:
     if piece is None or piece.kind != "king":
         return False
 
+    
     home_row = 7 if piece.colour == "white" else 0
     if start_row != home_row or start_col != 4:
         return False

@@ -112,6 +112,47 @@ def test_move_piece_moves_piece_and_switches_turn_for_valid_move(monkeypatch):
     assert board.turn == "black"
 
 
+def test_move_piece_sets_en_passant_target_after_double_pawn_move(monkeypatch):
+    board = Board()
+    pawn = Piece("white", "pawn")
+    board.set_piece(6, 4, pawn)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    board.move_piece(6, 4, 4, 4)
+
+    assert board.en_passant_target == (5, 4)
+
+
+def test_move_piece_clears_en_passant_target_after_non_double_move(monkeypatch):
+    board = Board()
+    pawn = Piece("white", "pawn")
+    board.set_piece(6, 4, pawn)
+    board.en_passant_target = (2, 3)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    board.move_piece(6, 4, 5, 4)
+
+    assert board.en_passant_target is None
+
+
+def test_move_piece_removes_captured_pawn_for_en_passant(monkeypatch):
+    board = Board()
+    white_pawn = Piece("white", "pawn")
+    black_pawn = Piece("black", "pawn")
+    board.set_piece(3, 4, white_pawn)
+    board.set_piece(3, 5, black_pawn)
+    board.en_passant_target = (2, 5)
+
+    monkeypatch.setattr(board_module, "validate_move", lambda *args: True)
+
+    board.move_piece(3, 4, 2, 5)
+
+    assert board.get_piece(2, 5) is white_pawn
+    assert board.get_piece(3, 5) is None
+
+
 def test_move_piece_replaces_destination_piece_when_move_is_valid(monkeypatch):
     board = Board()
     rook = Piece("white", "rook")
@@ -247,7 +288,7 @@ def test_copy_returns_board_with_independent_grid_lists():
     rook = Piece("white", "rook")
     board.set_piece(7, 0, rook)
     board.turn = "black"
-    board.en_passant_target = "e3"
+    board.en_passant_target = (5, 4)
     board.castling_rights["white_queenside"] = False
 
     copied_board = board.copy()
@@ -261,7 +302,7 @@ def test_copy_returns_board_with_independent_grid_lists():
     assert board.get_piece(7, 0) is rook
     assert board.get_piece(4, 0) is None
     assert copied_board.turn == "black"
-    assert copied_board.en_passant_target == "e3"
+    assert copied_board.en_passant_target == (5, 4)
     assert copied_board.castling_rights["white_queenside"] is False
     assert board.castling_rights["black_kingside"] is True
 

@@ -50,14 +50,15 @@ def is_valid_pawn_move(board, start_row, start_col, end_row, end_col) -> bool:
         # Must capture opposing piece
         target_piece = board.get_piece(end_row, end_col)
         
-        if target_piece is None:
+        # Don't need to check colour for en passant since it is a always the opposite
+        if target_piece is None and not is_valid_en_passant(board, start_row, start_col, end_row, end_col):
             return False
         
-        if target_piece.colour == piece.colour:
+        if target_piece and target_piece.colour == piece.colour:
             return False
         
         return True
-
+    
     return False
 
 
@@ -73,3 +74,24 @@ def is_valid_pawn_attack(board, start_row, start_col, target_row, target_col) ->
     direction = -1 if piece.colour == "white" else 1
 
     return delta_row == direction and abs(delta_col) == 1
+
+
+def is_valid_en_passant(board, start_row, start_col, target_row, target_col):
+    """Return True if the pawn move is a legal en passant capture."""
+
+    piece = board.get_piece(start_row, start_col)
+    if piece is None or piece.kind != "pawn":
+        return False
+
+    if board.en_passant_target != (target_row, target_col):
+        return False
+
+    if not board.is_empty(target_row, target_col):
+        return False
+
+    captured_piece = board.get_piece(start_row, target_col)
+    if captured_piece is None or captured_piece.kind != "pawn":
+        return False
+
+    return captured_piece.colour != piece.colour
+    

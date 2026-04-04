@@ -18,6 +18,7 @@
 
 from .pieces import Piece
 from .validator import validate_move
+from .utilities import get_move_offset
 
 class Board:
     """Stores the board grid, active turn, and en passant target square."""
@@ -30,7 +31,7 @@ class Board:
         ]
         
         self.turn = "white"
-        self.en_passant_target: str | None = None
+        self.en_passant_target: tuple[int, int] | None = None
 
         self.castling_rights = {
             "white_kingside": True,
@@ -99,6 +100,7 @@ class Board:
         captured_piece = self.get_piece(end_row, end_col)
         self._apply_move_unchecked(start_row, start_col, end_row, end_col)
         self.update_castling_rights(start_row, start_col, end_row, end_col, captured_piece)
+        self.update_en_passant_target(start_row, start_col, end_row, end_col)
         
         self.turn = "black" if self.turn == "white" else "white"        
         
@@ -109,6 +111,16 @@ class Board:
         """Move a piece without validating legality or updating turn state."""
 
         piece = self.get_piece(start_row, start_col)
+
+        if (
+            piece is not None
+            and piece.kind == "pawn"
+            and start_col != end_col
+            and self.is_empty(end_row, end_col)
+            and self.en_passant_target == (end_row, end_col)
+        ):
+            self.set_piece(start_row, end_col, None)
+
         self.set_piece(start_row, start_col, None)
         self.set_piece(end_row, end_col, piece)
 
@@ -162,6 +174,20 @@ class Board:
             self.castling_rights["black_kingside"] = False
         elif captured_piece.colour == "black" and end_row == 0 and end_col == 0:
             self.castling_rights["black_queenside"] = False
+
+
+    def update_en_passant_target(self, start_row: int, start_col: int, end_row: int, end_col: int) -> None:
+        """Update en passant target based on a move"""
+
+        self.en_passant_target = None
+
+        piece = self.get_piece(end_row, end_col)
+        if piece is None or piece.kind != "pawn":
+            return
+
+        d_row, d_col = get_move_offset(start_row, start_col, end_row, end_col)
+        if abs(d_row) == 2 and d_col == 0:
+            self.en_passant_target = (start_row + (d_row // 2), start_col)
 
 
     def load_fen(self, fen: str) -> None:
