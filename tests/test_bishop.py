@@ -1,10 +1,10 @@
 from chess_validator.validator import validate_move
-from chess_validator.board import Board
 from chess_validator.pieces import Piece
+from tests.helpers import board_with_kings
 
 
 def test_allows_bishop_move_up_left_on_clear_diagonal():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
 
@@ -12,7 +12,7 @@ def test_allows_bishop_move_up_left_on_clear_diagonal():
 
 
 def test_allows_bishop_move_up_right_on_clear_diagonal():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
 
@@ -20,7 +20,7 @@ def test_allows_bishop_move_up_right_on_clear_diagonal():
 
 
 def test_allows_bishop_move_down_left_on_clear_diagonal():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
 
@@ -28,7 +28,7 @@ def test_allows_bishop_move_down_left_on_clear_diagonal():
 
 
 def test_allows_bishop_move_down_right_on_clear_diagonal():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
 
@@ -36,7 +36,7 @@ def test_allows_bishop_move_down_right_on_clear_diagonal():
 
 
 def test_rejects_bishop_horizontal_move():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
 
@@ -44,7 +44,7 @@ def test_rejects_bishop_horizontal_move():
 
 
 def test_rejects_bishop_vertical_move():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
 
@@ -52,7 +52,7 @@ def test_rejects_bishop_vertical_move():
 
 
 def test_rejects_bishop_move_when_blocked_on_diagonal():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
     board.set_piece(3, 3, Piece("black", "pawn"))
@@ -61,7 +61,7 @@ def test_rejects_bishop_move_when_blocked_on_diagonal():
 
 
 def test_allows_bishop_capture_when_path_is_clear():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
     board.set_piece(2, 2, Piece("black", "knight"))
@@ -70,7 +70,7 @@ def test_allows_bishop_capture_when_path_is_clear():
 
 
 def test_rejects_bishop_move_onto_own_piece():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "bishop"))
     board.set_piece(2, 2, Piece("white", "knight"))

@@ -1,10 +1,10 @@
 from chess_validator.validator import validate_move
-from chess_validator.board import Board
 from chess_validator.pieces import Piece
+from tests.helpers import board_with_kings
 
 
 def test_allows_king_move_one_square_up():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -12,7 +12,7 @@ def test_allows_king_move_one_square_up():
 
 
 def test_allows_king_move_one_square_down():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -20,7 +20,7 @@ def test_allows_king_move_one_square_down():
 
 
 def test_allows_king_move_one_square_left():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -28,7 +28,7 @@ def test_allows_king_move_one_square_left():
 
 
 def test_allows_king_move_one_square_right():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -36,7 +36,7 @@ def test_allows_king_move_one_square_right():
 
 
 def test_allows_king_move_one_square_diagonally():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -44,7 +44,7 @@ def test_allows_king_move_one_square_diagonally():
 
 
 def test_rejects_king_move_two_squares_vertically():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -52,7 +52,7 @@ def test_rejects_king_move_two_squares_vertically():
 
 
 def test_rejects_king_move_two_squares_horizontally():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -60,7 +60,7 @@ def test_rejects_king_move_two_squares_horizontally():
 
 
 def test_rejects_king_move_two_squares_diagonally():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
 
@@ -68,7 +68,7 @@ def test_rejects_king_move_two_squares_diagonally():
 
 
 def test_allows_king_capture():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
     board.set_piece(3, 3, Piece("black", "bishop"))
@@ -77,7 +77,7 @@ def test_allows_king_capture():
 
 
 def test_rejects_king_move_onto_own_piece():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "king"))
     board.set_piece(3, 3, Piece("white", "bishop"))

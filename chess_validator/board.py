@@ -158,3 +158,13 @@ class Board:
                 else:
                     print(square.fen_symbol(), end=" ")
             print()
+
+
+    def copy(self) -> "Board":
+        """Return a copy of the board"""
+        
+        new_board = Board()
+        new_board.turn = self.turn
+        new_board.en_passant_target = self.en_passant_target
+        new_board.grid = [row[:] for row in self.grid]
+        return new_board

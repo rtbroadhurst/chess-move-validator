@@ -1,10 +1,10 @@
 from chess_validator.validator import validate_move
-from chess_validator.board import Board
 from chess_validator.pieces import Piece
+from tests.helpers import board_with_kings
 
 
 def test_allows_queen_vertical_move_on_clear_file():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
 
@@ -12,7 +12,7 @@ def test_allows_queen_vertical_move_on_clear_file():
 
 
 def test_allows_queen_horizontal_move_on_clear_rank():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
 
@@ -20,7 +20,7 @@ def test_allows_queen_horizontal_move_on_clear_rank():
 
 
 def test_allows_queen_diagonal_move_on_clear_path():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
 
@@ -28,7 +28,7 @@ def test_allows_queen_diagonal_move_on_clear_path():
 
 
 def test_rejects_queen_knight_like_move():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
 
@@ -36,7 +36,7 @@ def test_rejects_queen_knight_like_move():
 
 
 def test_rejects_queen_vertical_move_when_blocked():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
     board.set_piece(2, 4, Piece("black", "pawn"))
@@ -45,7 +45,7 @@ def test_rejects_queen_vertical_move_when_blocked():
 
 
 def test_rejects_queen_diagonal_move_when_blocked():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
     board.set_piece(3, 3, Piece("black", "pawn"))
@@ -54,7 +54,7 @@ def test_rejects_queen_diagonal_move_when_blocked():
 
 
 def test_allows_queen_capture_on_clear_file():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
     board.set_piece(1, 4, Piece("black", "rook"))
@@ -63,7 +63,7 @@ def test_allows_queen_capture_on_clear_file():
 
 
 def test_allows_queen_capture_on_clear_diagonal():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
     board.set_piece(1, 1, Piece("black", "bishop"))
@@ -72,7 +72,7 @@ def test_allows_queen_capture_on_clear_diagonal():
 
 
 def test_rejects_queen_move_onto_own_piece():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(4, 4, Piece("white", "queen"))
     board.set_piece(1, 4, Piece("white", "rook"))

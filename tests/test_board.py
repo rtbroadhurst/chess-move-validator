@@ -128,6 +128,48 @@ def test_move_piece_replaces_destination_piece_when_move_is_valid(monkeypatch):
     assert board.get_piece(4, 0) is rook
 
 
+def test_apply_move_unchecked_moves_piece_without_switching_turn():
+    board = Board()
+    rook = Piece("white", "rook")
+    board.set_piece(7, 0, rook)
+
+    board._apply_move_unchecked(7, 0, 4, 0)
+
+    assert board.get_piece(7, 0) is None
+    assert board.get_piece(4, 0) is rook
+    assert board.turn == "white"
+
+
+def test_copy_returns_board_with_independent_grid_lists():
+    board = Board()
+    rook = Piece("white", "rook")
+    board.set_piece(7, 0, rook)
+    board.turn = "black"
+    board.en_passant_target = "e3"
+
+    copied_board = board.copy()
+    copied_board.set_piece(7, 0, None)
+    copied_board.set_piece(4, 0, rook)
+
+    assert copied_board is not board
+    assert copied_board.grid is not board.grid
+    assert copied_board.grid[7] is not board.grid[7]
+    assert board.get_piece(7, 0) is rook
+    assert board.get_piece(4, 0) is None
+    assert copied_board.turn == "black"
+    assert copied_board.en_passant_target == "e3"
+
+
+def test_copy_preserves_piece_objects_in_squares():
+    board = Board()
+    king = Piece("white", "king")
+    board.set_piece(7, 4, king)
+
+    copied_board = board.copy()
+
+    assert copied_board.get_piece(7, 4) is king
+
+
 def test_load_fen_loads_empty_board():
     board = Board()
 

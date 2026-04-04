@@ -1,9 +1,9 @@
 from chess_validator.validator import validate_move
-from chess_validator.board import Board
 from chess_validator.pieces import Piece
+from tests.helpers import board_with_kings
 
 def test_allows_rook_vertical_move_on_clear_file():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(7, 0, Piece("white", "rook"))
 
@@ -11,7 +11,7 @@ def test_allows_rook_vertical_move_on_clear_file():
 
 
 def test_allows_rook_horizontal_move_on_clear_rank():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(7, 0, Piece("white", "rook"))
 
@@ -19,7 +19,7 @@ def test_allows_rook_horizontal_move_on_clear_rank():
 
 
 def test_rejects_rook_diagonal_move():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(7, 0, Piece("white", "rook"))
 
@@ -27,7 +27,7 @@ def test_rejects_rook_diagonal_move():
 
 
 def test_rejects_rook_vertical_move_when_blocked():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(7, 0, Piece("white", "rook"))
     board.set_piece(5, 0, Piece("black", "pawn"))
@@ -36,7 +36,7 @@ def test_rejects_rook_vertical_move_when_blocked():
 
 
 def test_rejects_rook_horizontal_move_when_blocked():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(7, 0, Piece("white", "rook"))
     board.set_piece(7, 3, Piece("black", "pawn"))
@@ -45,7 +45,7 @@ def test_rejects_rook_horizontal_move_when_blocked():
 
 
 def test_allows_rook_capture_when_path_is_clear():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(7, 0, Piece("white", "rook"))
     board.set_piece(4, 0, Piece("black", "knight"))
@@ -54,7 +54,7 @@ def test_allows_rook_capture_when_path_is_clear():
 
 
 def test_rejects_rook_move_onto_own_piece():
-    board = Board()
+    board = board_with_kings()
     board.turn = "white"
     board.set_piece(7, 0, Piece("white", "rook"))
     board.set_piece(4, 0, Piece("white", "knight"))
