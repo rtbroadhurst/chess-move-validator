@@ -13,6 +13,8 @@ def test_board_starts_with_expected_defaults():
     assert all(square is None for row in board.grid for square in row)
     assert board.turn == "white"
     assert board.en_passant_target is None
+    assert board.half_move_clock == 0
+    assert board.full_move_number == 0
 
 
 def test_is_in_bounds():
@@ -307,6 +309,8 @@ def test_copy_returns_board_with_independent_grid_lists():
     board.set_piece(7, 0, rook)
     board.turn = "black"
     board.en_passant_target = (5, 4)
+    board.half_move_clock = 7
+    board.full_move_number = 12
     board.castling_rights["white_queenside"] = False
 
     copied_board = board.copy()
@@ -321,6 +325,8 @@ def test_copy_returns_board_with_independent_grid_lists():
     assert board.get_piece(4, 0) is None
     assert copied_board.turn == "black"
     assert copied_board.en_passant_target == (5, 4)
+    assert copied_board.half_move_clock == 7
+    assert copied_board.full_move_number == 12
     assert copied_board.castling_rights["white_queenside"] is False
     assert board.castling_rights["black_kingside"] is True
 
@@ -367,6 +373,28 @@ def test_load_fen_places_pieces_on_expected_squares():
     assert board.get_piece(3, 3) is None
 
 
+def test_load_fen_loads_full_state_fields():
+    board = Board()
+
+    board.load_fen("r3k2r/8/8/8/8/8/8/R3K2R b Kq e3 4 7")
+
+    assert board.turn == "black"
+    assert board.castling_rights["white_kingside"] is True
+    assert board.castling_rights["white_queenside"] is False
+    assert board.castling_rights["black_kingside"] is False
+    assert board.castling_rights["black_queenside"] is True
+    assert board.en_passant_target == (5, 4)
+    assert board.half_move_clock == 4
+    assert board.full_move_number == 7
+
+
+def test_load_fen_raises_when_field_count_is_invalid():
+    board = Board()
+
+    with pytest.raises(ValueError):
+        board.load_fen("8/8/8/8/8/8/8/8 w - - 0")
+
+
 def test_load_fen_raises_when_rank_count_is_invalid():
     board = Board()
 
@@ -379,3 +407,31 @@ def test_load_fen_raises_when_rank_width_is_invalid():
 
     with pytest.raises(ValueError):
         board.load_fen("9/8/8/8/8/8/8/8")
+
+
+def test_load_fen_raises_when_active_colour_is_invalid():
+    board = Board()
+
+    with pytest.raises(ValueError):
+        board.load_fen("8/8/8/8/8/8/8/8 x - - 0 1")
+
+
+def test_load_fen_raises_when_castling_rights_are_invalid():
+    board = Board()
+
+    with pytest.raises(ValueError):
+        board.load_fen("8/8/8/8/8/8/8/8 w Kx - 0 1")
+
+
+def test_load_fen_raises_when_halfmove_clock_is_negative():
+    board = Board()
+
+    with pytest.raises(ValueError):
+        board.load_fen("8/8/8/8/8/8/8/8 w - - -1 1")
+
+
+def test_load_fen_raises_when_fullmove_number_is_less_than_one():
+    board = Board()
+
+    with pytest.raises(ValueError):
+        board.load_fen("8/8/8/8/8/8/8/8 w - - 0 0")

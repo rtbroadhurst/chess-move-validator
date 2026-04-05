@@ -19,6 +19,7 @@
 from .pieces import Piece
 from .validator import validate_move
 from .utilities import get_move_offset
+from .utilities import square_to_coords
 
 class Board:
     """Stores the board grid, active turn, and en passant target square."""
@@ -32,6 +33,8 @@ class Board:
         
         self.turn = "white"
         self.en_passant_target: tuple[int, int] | None = None
+        self.half_move_clock = 0
+        self.full_move_number = 0
 
         self.castling_rights = {
             "white_kingside": True,
@@ -104,6 +107,7 @@ class Board:
         self.update_pawn_promotion(start_row, start_col, end_row, end_col, promotion_type)
         
         self.turn = "black" if self.turn == "white" else "white"        
+        self.full_move_number += 1
         
         return True
 
@@ -204,14 +208,30 @@ class Board:
         """
         Load a board position from FEN (Forsyth-Edwards Notation)
 
-        Currently, only supports piece placement
+        Supports piece-placement-only FEN as well as full 6-field FEN.
         """
+
+        sections = fen.split()
+
+        if len(sections) == 1:
+            piece_placement_section = sections[0]
+            active_colour_section = "w"
+            castling_rights_section = "KQkq"
+            en_passant_target_section = "-"
+            half_move_clock_section = "0"
+            full_move_number_section = "1"
+        elif len(sections) == 6:
+            piece_placement_section = sections[0]
+            active_colour_section = sections[1]
+            castling_rights_section = sections[2]
+            en_passant_target_section = sections[3]
+            half_move_clock_section = sections[4]
+            full_move_number_section = sections[5]
+        else:
+            raise ValueError("FEN must contain either 1 or 6 fields.")
         
-        # Splits the entire FEN code and takes the first section
-        piece_placement = fen.split()[0]
-        
-        # Separates each rank
-        ranks = piece_placement.split("/")
+        # Piece placement
+        ranks = piece_placement_section.split("/")
 
         if len(ranks) != 8:
             raise ValueError("FEN piece placement must contain 8 ranks.")
@@ -243,6 +263,63 @@ class Board:
             new_grid.append(row)
 
         self.grid = new_grid
+        
+        # Active colour
+        if active_colour_section == "w":
+            self.turn = "white"
+        elif active_colour_section == "b":
+            self.turn = "black"
+        else:
+            raise ValueError("Active colour field must be 'w' or 'b'.")
+        
+        # Castling rights
+        for item in self.castling_rights:
+            self.castling_rights[item] = False
+        
+        seen_castling_rights = set()
+        for right in castling_rights_section:
+            match right:
+                case "K":
+                    if right in seen_castling_rights:
+                        raise ValueError("Duplicate castling rights are not allowed.")
+                    self.castling_rights["white_kingside"] = True
+                case "Q":
+                    if right in seen_castling_rights:
+                        raise ValueError("Duplicate castling rights are not allowed.")
+                    self.castling_rights["white_queenside"] = True
+                case "k":
+                    if right in seen_castling_rights:
+                        raise ValueError("Duplicate castling rights are not allowed.")
+                    self.castling_rights["black_kingside"] = True
+                case "q":
+                    if right in seen_castling_rights:
+                        raise ValueError("Duplicate castling rights are not allowed.")
+                    self.castling_rights["black_queenside"] = True
+                case "-":
+                    if castling_rights_section != "-":
+                        raise ValueError("'-' is only valid when no castling rights exist.")
+                case _:
+                    raise ValueError("Invalid castling rights section")
+
+            seen_castling_rights.add(right)
+        
+        
+        # En passant target
+        if en_passant_target_section == "-":
+            self.en_passant_target = None
+        else:
+            row, column = square_to_coords(en_passant_target_section)
+            self.en_passant_target = (row, column)
+            
+        # Half move clock
+        self.half_move_clock = int(half_move_clock_section)
+        if self.half_move_clock < 0:
+            raise ValueError("Halfmove clock must be non-negative.")
+        
+        # Full move number
+        self.full_move_number = int(full_move_number_section)
+        if self.full_move_number < 1:
+            raise ValueError("Fullmove number must be at least 1.")
 
 
     def print_board(self) -> None:
@@ -264,6 +341,8 @@ class Board:
         new_board = Board()
         new_board.turn = self.turn
         new_board.en_passant_target = self.en_passant_target
+        new_board.half_move_clock = self.half_move_clock
+        new_board.full_move_number = self.full_move_number
         new_board.castling_rights = self.castling_rights.copy()
         new_board.grid = [row[:] for row in self.grid]
         return new_board
