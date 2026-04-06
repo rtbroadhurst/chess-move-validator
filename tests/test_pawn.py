@@ -1,3 +1,4 @@
+from chess_validator.movement_rules import generate_pawn_pseudo_legal_moves
 from chess_validator.validator import validate_move
 from chess_validator.pieces import Piece
 from tests.helpers import board_with_kings
@@ -171,3 +172,52 @@ def test_rejects_promotion_type_for_non_promotion_move():
     board.set_piece(6, 4, Piece("white", "pawn"))
 
     assert validate_move(board, 6, 4, 5, 4, "queen") is False
+
+
+def test_generates_white_pawn_pseudo_legal_moves():
+    board = board_with_kings()
+    board.turn = "white"
+    board.set_piece(6, 4, Piece("white", "pawn"))
+    board.set_piece(5, 5, Piece("black", "knight"))
+
+    moves = generate_pawn_pseudo_legal_moves(board, 6, 4)
+
+    assert moves == [
+        (5, 4),
+        (4, 4),
+        (5, 3),
+        (5, 5),
+    ]
+
+
+def test_generates_white_en_passant_pseudo_legal_move():
+    board = board_with_kings()
+    board.turn = "white"
+    board.set_piece(3, 4, Piece("white", "pawn"))
+    board.set_piece(3, 5, Piece("black", "pawn"))
+    board.en_passant_target = (2, 5)
+
+    moves = generate_pawn_pseudo_legal_moves(board, 3, 4)
+
+    assert moves == [
+        (2, 4),
+        (1, 4),
+        (2, 3),
+        (2, 5),
+    ]
+
+
+def test_generates_geometry_targets_for_promoting_white_pawn():
+    board = board_with_kings()
+    board.turn = "white"
+    board.set_piece(1, 4, Piece("white", "pawn"))
+    board.set_piece(0, 5, Piece("black", "rook"))
+
+    moves = generate_pawn_pseudo_legal_moves(board, 1, 4)
+
+    assert moves == [
+        (0, 4),
+        (-1, 4),
+        (0, 3),
+        (0, 5),
+    ]

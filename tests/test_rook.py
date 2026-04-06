@@ -1,3 +1,4 @@
+from chess_validator.movement_rules import generate_rook_pseudo_legal_moves
 from chess_validator.validator import validate_move
 from chess_validator.pieces import Piece
 from tests.helpers import board_with_kings
@@ -60,3 +61,50 @@ def test_rejects_rook_move_onto_own_piece():
     board.set_piece(4, 0, Piece("white", "knight"))
 
     assert validate_move(board, 7, 0, 4, 0) is False
+
+
+def test_generates_rook_pseudo_legal_moves_until_board_edge():
+    board = board_with_kings()
+    board.set_piece(4, 4, Piece("white", "rook"))
+
+    moves = generate_rook_pseudo_legal_moves(board, 4, 4)
+
+    assert moves == [
+        (3, 4),
+        (2, 4),
+        (1, 4),
+        (0, 4),
+        (5, 4),
+        (6, 4),
+        (7, 4),
+        (4, 3),
+        (4, 2),
+        (4, 1),
+        (4, 0),
+        (4, 5),
+        (4, 6),
+        (4, 7),
+    ]
+
+
+def test_generates_rook_pseudo_legal_moves_stop_at_first_blocker():
+    board = board_with_kings()
+    board.set_piece(4, 4, Piece("white", "rook"))
+    board.set_piece(2, 4, Piece("black", "pawn"))
+    board.set_piece(4, 6, Piece("white", "pawn"))
+
+    moves = generate_rook_pseudo_legal_moves(board, 4, 4)
+
+    assert moves == [
+        (3, 4),
+        (2, 4),
+        (5, 4),
+        (6, 4),
+        (7, 4),
+        (4, 3),
+        (4, 2),
+        (4, 1),
+        (4, 0),
+        (4, 5),
+        (4, 6),
+    ]

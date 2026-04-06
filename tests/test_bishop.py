@@ -1,3 +1,4 @@
+from chess_validator.movement_rules import generate_bishop_pseudo_legal_moves
 from chess_validator.validator import validate_move
 from chess_validator.pieces import Piece
 from tests.helpers import board_with_kings
@@ -76,3 +77,48 @@ def test_rejects_bishop_move_onto_own_piece():
     board.set_piece(2, 2, Piece("white", "knight"))
 
     assert validate_move(board, 4, 4, 2, 2) is False
+
+
+def test_generates_bishop_pseudo_legal_moves_until_board_edge():
+    board = board_with_kings()
+    board.set_piece(4, 4, Piece("white", "bishop"))
+
+    moves = generate_bishop_pseudo_legal_moves(board, 4, 4)
+
+    assert moves == [
+        (3, 3),
+        (2, 2),
+        (1, 1),
+        (0, 0),
+        (3, 5),
+        (2, 6),
+        (1, 7),
+        (5, 3),
+        (6, 2),
+        (7, 1),
+        (5, 5),
+        (6, 6),
+        (7, 7),
+    ]
+
+
+def test_generates_bishop_pseudo_legal_moves_stop_at_first_blocker():
+    board = board_with_kings()
+    board.set_piece(4, 4, Piece("white", "bishop"))
+    board.set_piece(2, 2, Piece("black", "pawn"))
+    board.set_piece(6, 6, Piece("white", "pawn"))
+
+    moves = generate_bishop_pseudo_legal_moves(board, 4, 4)
+
+    assert moves == [
+        (3, 3),
+        (2, 2),
+        (3, 5),
+        (2, 6),
+        (1, 7),
+        (5, 3),
+        (6, 2),
+        (7, 1),
+        (5, 5),
+        (6, 6),
+    ]
