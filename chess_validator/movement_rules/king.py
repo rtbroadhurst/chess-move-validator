@@ -58,3 +58,18 @@ def is_valid_castling_move(board, start_row, start_col, end_col) -> bool:
             return False
 
     return True
+
+
+def generate_king_pseudo_legal_moves(board, start_row, start_col):
+    """Return king move targets that match the piece's movement geometry."""
+
+    return [
+        (start_row - 1, start_col - 1),
+        (start_row - 1, start_col),
+        (start_row - 1, start_col + 1),
+        (start_row, start_col - 1),
+        (start_row, start_col + 1),
+        (start_row + 1, start_col),
+        (start_row + 1, start_col - 1),
+        (start_row + 1, start_col + 1),
+    ]

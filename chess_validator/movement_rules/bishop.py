@@ -28,3 +28,24 @@ def is_valid_bishop_move(board, start_row, start_col, end_row, end_col) -> bool:
         current_col += step_col
 
     return True
+
+
+def generate_bishop_pseudo_legal_moves(board, start_row, start_col):
+    """Return bishop move targets that match the piece's movement geometry."""
+    moves = []
+
+    for step_row, step_col in ((-1, -1), (-1, 1), (1, -1), (1, 1)):
+        current_row = start_row + step_row
+        current_col = start_col + step_col
+
+        while board.is_in_bounds(current_row, current_col):
+            moves.append((current_row, current_col))
+
+            if not board.is_empty(current_row, current_col):
+                break
+
+            current_row += step_row
+            current_col += step_col
+
+    return moves
+    
