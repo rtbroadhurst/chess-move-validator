@@ -44,22 +44,27 @@ def generate_pseudo_legal_moves(board: Board) -> list[tuple[int, int, int, int, 
                                 moves.append((row, col, end_row, end_col, promotion_type))
                         else:
                             moves.append((row, col, end_row, end_col, None))
+                            
                 case "knight":
                     target_squares = generate_knight_pseudo_legal_moves(board, row, col)
                     for end_row, end_col in target_squares:
                         moves.append((row, col, end_row, end_col, None))
+                        
                 case "bishop":
                     target_squares = generate_bishop_pseudo_legal_moves(board, row, col)
                     for end_row, end_col in target_squares:
                         moves.append((row, col, end_row, end_col, None))
+                        
                 case "rook":
                     target_squares = generate_rook_pseudo_legal_moves(board, row, col)
                     for end_row, end_col in target_squares:
                         moves.append((row, col, end_row, end_col, None))
+                        
                 case "queen":
                     target_squares = generate_queen_pseudo_legal_moves(board, row, col)
                     for end_row, end_col in target_squares:
                         moves.append((row, col, end_row, end_col, None))
+                        
                 case "king":
                     target_squares = generate_king_pseudo_legal_moves(board, row, col)
                     for end_row, end_col in target_squares:
