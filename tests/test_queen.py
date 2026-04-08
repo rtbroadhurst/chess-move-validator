@@ -1,7 +1,7 @@
 from chess_validator.movement_rules import generate_queen_pseudo_legal_moves
 from chess_validator.validator import validate_move
 from chess_validator.pieces import Piece
-from tests.helpers import board_with_kings
+from .helpers import board_with_kings
 
 
 def test_allows_queen_vertical_move_on_clear_file():

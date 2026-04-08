@@ -1,11 +1,5 @@
 """Command-line interface for move validation and perft."""
 
-from pathlib import Path
-import sys
-
-if __package__ in {None, ""}:
-    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
 from chess_validator.board import Board
 from chess_validator.perft import perft as calculate_perft
 from chess_validator.utilities import square_to_coords

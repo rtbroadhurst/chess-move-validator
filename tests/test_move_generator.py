@@ -1,7 +1,7 @@
 from chess_validator.board import Board
 from chess_validator.move_generator import generate_legal_moves, generate_pseudo_legal_moves
 from chess_validator.pieces import Piece
-from tests.helpers import board_with_kings
+from .helpers import board_with_kings
 
 
 def test_generate_pseudo_legal_moves_only_uses_side_to_move():

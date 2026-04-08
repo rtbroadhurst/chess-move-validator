@@ -1,6 +1,6 @@
 from chess_validator.validator import validate_move
 from chess_validator.pieces import Piece
-from tests.helpers import board_with_kings
+from .helpers import board_with_kings
 
 
 def test_allows_king_move_one_square_up():

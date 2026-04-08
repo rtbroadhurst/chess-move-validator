@@ -1,7 +1,7 @@
 from chess_validator.movement_rules import generate_pawn_pseudo_legal_moves
 from chess_validator.validator import validate_move
 from chess_validator.pieces import Piece
-from tests.helpers import board_with_kings
+from .helpers import board_with_kings
 
 # Testing through validate_move because pawn rules rely on shared validator checks and it better reflects real usage.
 

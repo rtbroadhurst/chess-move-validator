@@ -1,0 +1,23 @@
+[project]
+name = "chess-move-validator"
+version = "0.1.0"
+description = "A Python project for validating legal chess moves with perft testing."
+authors = [{ name = "Ryan Broadhurst" }]
+readme = "README.md"
+requires-python = ">=3.10"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
+[project.scripts]
+chess-validator = "chess_validator.cli:main"
