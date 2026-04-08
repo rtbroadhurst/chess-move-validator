@@ -5,13 +5,16 @@ from .move_generator import generate_legal_moves
 
 
 def perft(board: Board, depth: int) -> int:
-    """Return peft number"""
+    """Return perft number for a given depth"""
 
     if depth < 0:
         raise ValueError("Depth must be non-negative.")
 
     if depth == 0:
         return 1
+    
+    if depth == 1:
+        return sum(1 for _ in generate_legal_moves(board))
 
     nodes = 0
 
