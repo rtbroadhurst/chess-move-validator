@@ -81,11 +81,6 @@ Reference results are taken from:
 | 3    | 97,862        | 97,862      | **Yes** |
 | 4    | 4,085,603     | 4,085,603   | **Yes** |
 
-### Notes
-
-- All results match expected values up to the listed depths
-- Confirms correct handling of chess rules
-
 ### Position 5
 
 **FEN:** `rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8`
@@ -98,6 +93,10 @@ Reference results are taken from:
 | 4    | 2,103,487     | 2,103,487   | **Yes** |
 | 5    | 89,941,194    | 89,941,194  | **Yes** |
 
+### Notes
+
+- All results match expected values up to the listed depths
+- Confirms correct handling of chess rules (castling, en passant, promotion, check detection)
 
 ## Performance
 
