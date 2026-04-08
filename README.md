@@ -104,7 +104,7 @@ I prioritised clarity and correctness when writing this program.
 
 In particular, king safety validation and the perft implementation use board copying rather than a make/unmake approach. This reduces the chance of errors, but has a significant impact on performance. This tradeoff was made to prioritise correctness and simplicity during initial development.
 
-If I were to continue developing the project, improving this would be the main focus.
+If I were to continue developing the project, improving this would likely be the next step.
 
 ## Testing
 
