@@ -1,5 +1,6 @@
 """Command-line interface for move validation and perft."""
 
+import argparse
 from chess_validator.board import Board
 from chess_validator.perft import perft as calculate_perft
 from chess_validator.utilities import square_to_coords
@@ -17,7 +18,94 @@ STARTING_POSITION_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 
 
 
 def main() -> int:
-    """Run the CLI."""
+    """CLI entry point."""
+
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest="command")
+
+    validate = subparsers.add_parser("validate")
+    validate.add_argument("fen")
+    validate.add_argument("move")
+
+    perft = subparsers.add_parser("perft")
+    perft.add_argument("fen")
+    perft.add_argument("depth", type=int)
+
+    args = parser.parse_args()
+
+    if args.command == "validate":
+        board = Board()
+        fen = STARTING_POSITION_FEN if args.fen == "startpos" else args.fen
+
+        try:
+            board.load_fen(fen)
+        except ValueError as exc:
+            print(f"Invalid FEN: {exc}")
+            return 1
+
+        move = args.move.strip().lower()
+
+        if len(move) not in (4, 5):
+            print("Move must be in the form e2e4 or e7e8q.")
+            return 1
+
+        try:
+            start_row, start_col = square_to_coords(move[:2])
+            end_row, end_col = square_to_coords(move[2:4])
+        except ValueError as exc:
+            print(f"Invalid move: {exc}")
+            return 1
+
+        promotion_map = {
+            "q": "queen",
+            "r": "rook",
+            "b": "bishop",
+            "n": "knight",
+        }
+
+        promotion_type = None
+        if len(move) == 5:
+            promotion_type = promotion_map.get(move[4])
+            if promotion_type is None:
+                print("Invalid promotion piece.")
+                return 1
+
+        is_legal = is_valid_move(
+            board,
+            start_row,
+            start_col,
+            end_row,
+            end_col,
+            promotion_type,
+        )
+
+        print(is_legal)
+        return 0
+
+    if args.command == "perft":
+        board = Board()
+        fen = STARTING_POSITION_FEN if args.fen == "startpos" else args.fen
+
+        try:
+            board.load_fen(fen)
+        except ValueError as exc:
+            print(f"Invalid FEN: {exc}")
+            return 1
+
+        try:
+            nodes = calculate_perft(board, args.depth)
+        except ValueError as exc:
+            print(exc)
+            return 1
+
+        print(f"Perft({args.depth}) = {nodes}")
+        return 0
+
+    return cli_interactive()
+
+
+def cli_interactive():
+    """Run the interactive CLI if no arguments are given"""
 
     while True:
         choice = input(MENU_PROMPT).strip().lower()
