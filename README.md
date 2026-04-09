@@ -10,6 +10,29 @@ A Python project for validating legal chess moves, supporting the full ruleset a
 - FEN parsing
 - Perft testing and pytest based validation
 
+## Installation
+
+Clone the repository and install in editable mode:
+
+```bash
+git clone https://github.com/rtbroadhurst/chess-move-validator.git
+cd chess-move-validator
+pip install -e .
+```
+
+
+## Usage
+
+Validate a move:
+```chess-validator validate startpos e2e4```
+
+Run perft:
+```chess-validator perft startpos 4```
+
+Run without arguments to open the interactive menu:
+```chess-validator```
+
+
 ## Project Structure
 
 - `board.py` - Board state representation and manipulation
@@ -23,6 +46,7 @@ A Python project for validating legal chess moves, supporting the full ruleset a
 - `utilities.py` - Shared helper functions such as coordinate to square conversion
 - `cli.py` - Command line entry point for move validation and perft testing
 - `tests/` - Unit tests covering board state, validation, movement rules, attack logic, move generation, perft, utilities, and CLI
+
 
 ## Validation Flow
 
@@ -50,6 +74,7 @@ Move validation is orchestrated in `validator.py` as a pipeline:
    - Reject moves that result in an illegal position
 
 A move that passes every stage is considered fully legal.
+
 
 ## Perft Results
 
@@ -95,8 +120,10 @@ Reference results are taken from:
 
 ### Notes
 
+
 - All results match expected values up to the listed depths
 - Confirms correct handling of chess rules (castling, en passant, promotion, check detection)
+
 
 ## Performance
 
