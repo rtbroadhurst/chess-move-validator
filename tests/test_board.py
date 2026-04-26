@@ -14,7 +14,7 @@ def test_board_starts_with_expected_defaults():
     assert board.turn == "white"
     assert board.en_passant_target is None
     assert board.half_move_clock == 0
-    assert board.full_move_number == 0
+    assert board.full_move_number == 1
 
 
 def test_is_in_bounds():

@@ -34,7 +34,7 @@ class Board:
         self.turn = "white"
         self.en_passant_target: tuple[int, int] | None = None
         self.half_move_clock = 0
-        self.full_move_number = 0
+        self.full_move_number = 1
 
         self.castling_rights = {
             "white_kingside": True,
