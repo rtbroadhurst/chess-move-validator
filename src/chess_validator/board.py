@@ -78,7 +78,11 @@ class Board:
         for column in range(0, 8):
             for row in range(0, 8):
                 piece = self.get_piece(row, column)
-                if piece != None and piece.kind == "king" and piece.colour == colour:
+                if (
+                    piece is not None
+                    and piece.kind == "king"
+                    and piece.colour == colour
+                ):
                     return row, column
 
         raise ValueError(f"No {colour} king found on the board.")
