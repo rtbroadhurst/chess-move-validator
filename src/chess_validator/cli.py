@@ -6,13 +6,7 @@ from chess_validator.perft import perft as calculate_perft
 from chess_validator.utilities import square_to_coords
 from chess_validator.validator import validate_move as is_valid_move
 
-MENU_PROMPT = (
-    "\nChoose an option:\n"
-    "  1. Validate a move\n"
-    "  2. Run perft\n"
-    "  q. Quit\n"
-    "> "
-)
+MENU_PROMPT = "\nChoose an option:\n  1. Validate a move\n  2. Run perft\n  q. Quit\n> "
 
 STARTING_POSITION_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
@@ -199,9 +193,11 @@ def read_square(prompt: str) -> tuple[int, int]:
 def read_promotion_type() -> str | None:
     """Read an optional promotion piece."""
 
-    promotion_type = input(
-        "Promotion piece (queen, rook, bishop, knight, or leave blank): "
-    ).strip().lower()
+    promotion_type = (
+        input("Promotion piece (queen, rook, bishop, knight, or leave blank): ")
+        .strip()
+        .lower()
+    )
 
     return promotion_type or None
 

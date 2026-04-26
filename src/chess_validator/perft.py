@@ -12,13 +12,15 @@ def perft(board: Board, depth: int) -> int:
 
     if depth == 0:
         return 1
-    
+
     if depth == 1:
         return sum(1 for _ in generate_legal_moves(board))
 
     nodes = 0
 
-    for start_row, start_col, end_row, end_col, promotion_type in generate_legal_moves(board):
+    for start_row, start_col, end_row, end_col, promotion_type in generate_legal_moves(
+        board
+    ):
         next_board = board.copy()
         next_board.move_piece(start_row, start_col, end_row, end_col, promotion_type)
         nodes += perft(next_board, depth - 1)
@@ -26,7 +28,9 @@ def perft(board: Board, depth: int) -> int:
     return nodes
 
 
-def perft_divide(board: Board, depth: int) -> dict[tuple[int, int, int, int, str | None], int]:
+def perft_divide(
+    board: Board, depth: int
+) -> dict[tuple[int, int, int, int, str | None], int]:
     """Return the per move node counts for all legal moves at the root."""
 
     if depth < 0:

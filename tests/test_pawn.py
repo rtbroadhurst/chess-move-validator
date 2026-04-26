@@ -5,6 +5,7 @@ from .helpers import board_with_kings
 
 # Testing through validate_move because pawn rules rely on shared validator checks and it better reflects real usage.
 
+
 def test_allows_white_pawn_single_step_forward():
     board = board_with_kings()
     board.turn = "white"

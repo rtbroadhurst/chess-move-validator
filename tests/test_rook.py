@@ -3,6 +3,7 @@ from chess_validator.validator import validate_move
 from chess_validator.pieces import Piece
 from .helpers import board_with_kings
 
+
 def test_allows_rook_vertical_move_on_clear_file():
     board = board_with_kings()
     board.turn = "white"

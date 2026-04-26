@@ -3,7 +3,7 @@ Piece movement rules.
 
 These functions validate only geometric movement and obstruction.
 
-They do not check: 
+They do not check:
 - turn
 - king safety
 - check conditions

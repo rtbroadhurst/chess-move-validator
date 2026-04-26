@@ -84,7 +84,9 @@ def test_find_king_returns_coordinates_for_matching_colour():
     assert board.find_king("black") == (0, 4)
 
 
-def test_move_piece_returns_false_and_leaves_board_unchanged_for_invalid_move(monkeypatch):
+def test_move_piece_returns_false_and_leaves_board_unchanged_for_invalid_move(
+    monkeypatch,
+):
     board = Board()
     pawn = Piece("white", "pawn")
     board.set_piece(6, 4, pawn)

@@ -1,5 +1,6 @@
 """Stores the code for the piece classes"""
 
+
 class Piece:
     """Superclass for all pieces."""
 
@@ -9,7 +10,7 @@ class Piece:
 
     def fen_symbol(self) -> str:
         """Return the FEN symbol for this piece."""
-        
+
         symbols = {
             "pawn": "p",
             "rook": "r",
@@ -18,10 +19,10 @@ class Piece:
             "queen": "q",
             "king": "k",
         }
-        
+
         symbol = symbols[self.kind]
-        
+
         if self.colour == "white":
             return symbol.upper()
-        
+
         return symbol

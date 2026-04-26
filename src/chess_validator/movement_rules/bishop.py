@@ -6,7 +6,6 @@ from ..utilities import get_move_offset
 def is_valid_bishop_move(board, start_row, start_col, end_row, end_col) -> bool:
     """Return True if the bishop move is valid."""
 
-
     delta_row, delta_col = get_move_offset(start_row, start_col, end_row, end_col)
 
     # Move must be diagonal.
@@ -48,4 +47,3 @@ def generate_bishop_pseudo_legal_moves(board, start_row, start_col):
             current_col += step_col
 
     return moves
-    

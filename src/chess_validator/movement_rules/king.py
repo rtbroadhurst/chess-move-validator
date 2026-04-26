@@ -25,7 +25,6 @@ def is_valid_castling_move(board, start_row, start_col, end_col) -> bool:
     if piece is None or piece.kind != "king":
         return False
 
-    
     home_row = 7 if piece.colour == "white" else 0
     if start_row != home_row or start_col != 4:
         return False
@@ -42,7 +41,11 @@ def is_valid_castling_move(board, start_row, start_col, end_col) -> bool:
     if rook is None or rook.kind != "rook" or rook.colour != piece.colour:
         return False
 
-    path_cols = range(start_col + 1, rook_col) if side == "kingside" else range(rook_col + 1, start_col)
+    path_cols = (
+        range(start_col + 1, rook_col)
+        if side == "kingside"
+        else range(rook_col + 1, start_col)
+    )
     for col in path_cols:
         if not board.is_empty(home_row, col):
             return False
@@ -50,7 +53,9 @@ def is_valid_castling_move(board, start_row, start_col, end_col) -> bool:
     from ..attacks import is_square_attacked
 
     enemy_colour = "black" if piece.colour == "white" else "white"
-    transit_cols = [start_col, start_col + 1] if side == "kingside" else [start_col, start_col - 1]
+    transit_cols = (
+        [start_col, start_col + 1] if side == "kingside" else [start_col, start_col - 1]
+    )
     transit_cols.append(end_col)
 
     for col in transit_cols:

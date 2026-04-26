@@ -1,14 +1,12 @@
 """Contains logic for determining whether squares are attacked."""
 
-
 from .movement_rules import (
     is_valid_pawn_attack,
     is_valid_rook_move,
     is_valid_bishop_move,
     is_valid_knight_move,
     is_valid_queen_move,
-    is_valid_king_move,
-  )
+)
 
 
 def is_square_attacked(board, target_row, target_col, by_colour) -> bool:
@@ -41,18 +39,28 @@ def piece_attacks_square(board, start_row, start_col, target_row, target_col) ->
     if piece is None:
         return False
 
-    # Other than for pawn and king, movement_rules logic is reused 
+    # Other than for pawn and king, movement_rules logic is reused
     match piece.kind:
         case "pawn":
-            return is_valid_pawn_attack(board, start_row, start_col, target_row, target_col)
+            return is_valid_pawn_attack(
+                board, start_row, start_col, target_row, target_col
+            )
         case "rook":
-            return is_valid_rook_move(board, start_row, start_col, target_row, target_col)
+            return is_valid_rook_move(
+                board, start_row, start_col, target_row, target_col
+            )
         case "knight":
-            return is_valid_knight_move(board, start_row, start_col, target_row, target_col)
+            return is_valid_knight_move(
+                board, start_row, start_col, target_row, target_col
+            )
         case "bishop":
-            return is_valid_bishop_move(board, start_row, start_col, target_row, target_col)
+            return is_valid_bishop_move(
+                board, start_row, start_col, target_row, target_col
+            )
         case "queen":
-            return is_valid_queen_move(board, start_row, start_col, target_row, target_col)
+            return is_valid_queen_move(
+                board, start_row, start_col, target_row, target_col
+            )
         case "king":
             return abs(start_row - target_row) <= 1 and abs(start_col - target_col) <= 1
         case _:
