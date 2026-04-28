@@ -151,7 +151,9 @@ def play_moves_cli() -> None:
             continue
 
         try:
-            start_row, start_col, end_row, end_col, promotion_type = parse_move(move_input)
+            start_row, start_col, end_row, end_col, promotion_type = parse_move(
+                move_input
+            )
         except ValueError as exc:
             print(f"Invalid input: {exc}")
             continue

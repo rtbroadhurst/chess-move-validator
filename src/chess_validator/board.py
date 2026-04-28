@@ -353,7 +353,7 @@ class Board:
         """Print the current board layout."""
 
         print()
-        
+
         for rank_index, row in enumerate(self.grid):
             rank_number = 8 - rank_index
             print(f"{rank_number} ", end="")
@@ -363,7 +363,7 @@ class Board:
                 else:
                     print(square.display_symbol(), end=" ")
             print()
-    
+
         print("  a b c d e f g h")
         print(f"\n{self.turn.capitalize()} to move")
 
