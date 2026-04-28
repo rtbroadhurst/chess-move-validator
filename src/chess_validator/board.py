@@ -358,7 +358,7 @@ class Board:
                 if square is None:
                     print(".", end=" ")
                 else:
-                    print(square.fen_symbol(), end=" ")
+                    print(square.display_symbol(), end=" ")
             print()
 
     def copy(self) -> "Board":

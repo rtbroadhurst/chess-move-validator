@@ -26,3 +26,27 @@ class Piece:
             return symbol.upper()
 
         return symbol
+
+    def display_symbol(self) -> str:
+        """Return the Unicode character for this piece, used for board rendering."""
+
+        symbols = {
+            "white": {
+                "pawn": "♙",
+                "rook": "♖",
+                "knight": "♘",
+                "bishop": "♗",
+                "queen": "♕",
+                "king": "♔",
+            },
+            "black": {
+                "pawn": "♟",
+                "rook": "♜",
+                "knight": "♞",
+                "bishop": "♝",
+                "queen": "♛",
+                "king": "♚",
+            },
+        }
+
+        return symbols[self.colour][self.kind]
