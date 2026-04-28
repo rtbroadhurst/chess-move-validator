@@ -1,5 +1,7 @@
 # Chess Move Validator
 
+[![CI](https://github.com/rtbroadhurst/chess-move-validator/actions/workflows/ci.yml/badge.svg)](https://github.com/rtbroadhurst/chess-move-validator/actions/workflows/ci.yml)
+
 A Python project for validating legal chess moves, supporting the full ruleset and using perft testing to verify correctness.
 
 ## Features
