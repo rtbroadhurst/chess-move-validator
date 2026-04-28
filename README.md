@@ -4,6 +4,8 @@
 
 A Python project for validating legal chess moves, supporting the full ruleset and using perft testing to verify correctness.
 
+![Demo of the chess move validator running](assets/demo.gif)
+
 ## Features
 
 - Legal move validation for all pieces
